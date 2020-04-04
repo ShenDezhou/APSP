@@ -23,78 +23,75 @@ import math
 class AllPairsShortestPath:
     adj_matrix = None
     e_max = None
-    maxd = None
+    g_diameter = None
     use_dynamic = False
 
     def __init__(self, adj, g_diameter=9, use_dynamic=False):
         self.adj_matrix = adj
         self.e_max = cupy.max(self.adj_matrix)
-        self.maxd = g_diameter
+        self.g_diameter = g_diameter
         self.use_dynamic = use_dynamic
-        print('shape:', adj.shape, 'element_max', self.e_max, 'diameter:', self.maxd, 'use_dynamic:', self.use_dynamic)
+        print('shape:', adj.shape, 'element_max', self.e_max, 'diameter:', self.g_diameter, 'use_dynamic:', self.use_dynamic)
 
     def stat(self, op):
-        stat = [len(op[cupy.where(op <= i)]) for i in (1,self.maxd, self.e_max)]
+        stat = [len(op[cupy.where(op <= i)]) for i in (1, self.g_diameter, self.e_max)]
         print('stat:',(stat[0], stat[1]-stat[0], stat[2]-stat[1]))
         return stat
 
-    def mmax(self, op):
+    def max(self, op):
         print('mmax')
         index_op = cupy.where(op < self.e_max)
         op_min = cupy.min(op[index_op])
         op_max = cupy.max(op[index_op])
-        print('mmaxmin is ', op_min , 'max is ', op_max)
+        print('minv is ', op_min , 'maxv is ', op_max)
         return op_max
 
-    def exponent(self, op, base, current_mx):
+    def exponent(self, op, base, current_maxv):
         print('exp')
         index_op = cupy.where(op < self.e_max)
         rindex_op = cupy.where(op >= self.e_max)
         print('expi:',len(op[index_op]),'ri:',len(op[rindex_op]))
-        op[index_op] = current_mx - op[index_op]
+        op[index_op] = current_maxv - op[index_op]
         op[index_op] = cupy.power(base + 1, op[index_op])
         op[rindex_op] = 0
         print('exp:',op)
         return op
 
-    def logarithm(self, op, base, current_mx):
+    def logarithm(self, op, base, current_maxv):
         print('log')
         index_zero = cupy.where(op>0)
         rindex_zero = cupy.where(op==0)
         print('logi:', len(op[index_zero]), 'ri:', len(op[rindex_zero]))
-        op[index_zero] = 2 * current_mx - cupy.floor(cupy.log(op[index_zero]) // cupy.log(base + 1))
+        op[index_zero] = 2 * current_maxv - cupy.log(op[index_zero]) // cupy.log(base + 1)
         op[rindex_zero] = self.e_max
         print('log',op)
-        # self.stat(op)
         return op
 
-    def distanceP(self,op):
-        print('distp')
+    def dp(self, op):
+        print('dp')
         m = op.shape[0]
-        print('m,',m)
-        op_max = self.mmax(op)
+        op_max = self.max(op)
         op = self.exponent(op, m, op_max)
-        op = cupy.matmul(op,op)
+        op *= op
         op = self.logarithm(op, m, op_max)
-        print('distancep:',op)
+        print('dp:',op)
         return op
 
     def apsp(self, g_diameter=9):
         print('apsp')
         adj = self.adj_matrix
         counter = math.ceil(math.log(g_diameter, 2))
-        print('loop,',counter)
+        print('LOOP N:',counter)
         for i in range(counter):
-            print('loop:', i)
+            print('loop index:', i)
             print('apsp,a:', adj)
-            wr = self.distanceP(adj.copy())
+            wr = self.dp(adj.copy())
             print('apsp,b:', wr)
             post = cupy.minimum(adj, wr)
             print('apsp,c:', adj)
             if self.use_dynamic and cupy.all(cupy.equal(adj, post)):
-                print('LOOP EXIT.')
+                print('LOOP EXIT by dynamic decision.')
                 break
             adj = post
-
         print('apsp:', adj)
         return adj
