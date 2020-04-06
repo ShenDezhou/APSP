@@ -72,7 +72,7 @@ class AllPairsShortestPath:
         m = op.shape[0]
         op_max = self.max(op)
         op = self.exponent(op, m, op_max)
-        op *= op
+        op = cupy.matmul(op,op)
         op = self.logarithm(op, m, op_max)
         print('dp:',op)
         return op
@@ -95,3 +95,25 @@ class AllPairsShortestPath:
             adj = post
         print('apsp:', adj)
         return adj
+
+    def apsp_iter(self, g_diameter=9):
+        print('apsp')
+        adj = self.adj_matrix
+        counter = math.ceil(math.log(g_diameter, 2))
+        print('LOOP N:',counter)
+        for i in range(counter):
+            print('loop index:', i)
+            print('apsp,a:', adj)
+            wr = self.dp(adj.copy())
+            print('apsp,b:', wr)
+            post = cupy.minimum(adj, wr)
+            print('apsp,c:', adj)
+            if self.use_dynamic and cupy.all(cupy.equal(adj, post)):
+                yield adj
+                print('LOOP EXIT by dynamic decision.')
+                break
+            adj = post
+            yield  post
+        print('apsp:FIN')
+
+
