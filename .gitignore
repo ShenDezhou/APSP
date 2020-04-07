@@ -38,6 +38,10 @@ pip-log.txt
 pip-delete-this-directory.txt
 .idea/
 
+java/apsp/.idea/
+java/apsp/src/main/resources/
+java/apso/target/
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
