@@ -27,6 +27,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+.idea/
+target/
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -36,11 +39,6 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-.idea/
-
-java/apsp/.idea/
-java/apsp/src/main/resources/
-java/apso/target/
 
 # Unit test / coverage reports
 htmlcov/

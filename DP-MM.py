@@ -13,8 +13,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--use', type=str, default='gpu', help='cpu or gpu to use?')
 args = parser.parse_known_args()[0]
 
-#18.75 GPU
-#425.22 CPU
+#19.319744405999998 GPU
+#427.90335372500004 CPU
 
 if args.use =='cpu':
     import numpy as cupy
