@@ -43,11 +43,12 @@ class AllPairsShortestPathSparse:
     density = 0
 
 
-    def __init__(self, adj, g_diameter=9, use_dynamic=False):
+    def __init__(self, adj, g_diameter=9, use_dynamic=False, use_sparse=False):
         self.adj_matrix = adj
         self.e_max = cupy.max(self.adj_matrix)
         self.g_diameter = g_diameter
         self.use_dynamic = use_dynamic
+        self.use_sparse = use_sparse
         print('shape:', adj.shape, 'element_max', self.e_max, 'diameter:', self.g_diameter, 'use_dynamic:', self.use_dynamic)
 
     def stat(self, op):
@@ -92,10 +93,8 @@ class AllPairsShortestPathSparse:
         op_max = self.max(op)
         op = self.exponent(op, m, op_max)
         print('dense', self.density)
-        # check op is dense or not with 10% element, use dense MM, then use csrgemm.
-        if self.density>THRESHOLD:
-            op = cupy.matmul(op,op)
-        else:
+        # check op is dense or not, within THRESHOLD such as 10% sparse, then decide MM or SPMM to use.
+        if self.use_sparse and self.density < THRESHOLD:
             sop = csr_matrix(op)
             print('sparse nnz:', sop.nnz)
             if args.use == 'cpu':#cpu use @ after python 3
@@ -104,6 +103,8 @@ class AllPairsShortestPathSparse:
                 sop = cusparse.csrgemm(sop, sop)
             print('sparse nnz2:', sop.nnz)
             op = sop.todense()
+        else:
+            op = cupy.matmul(op, op)
         op = self.logarithm(op, m, op_max)
         print('dp:',op)
         return op
