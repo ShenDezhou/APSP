@@ -43,7 +43,7 @@ class AllPairsShortestPathSparse:
     density = 0
 
 
-    def __init__(self, adj, g_diameter=9, use_dynamic=False, use_sparse=False):
+    def __init__(self, adj, g_diameter=9, use_dynamic=False, use_sparse=True):
         self.adj_matrix = adj
         self.e_max = cupy.max(self.adj_matrix)
         self.g_diameter = g_diameter
