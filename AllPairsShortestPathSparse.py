@@ -93,7 +93,7 @@ class AllPairsShortestPathSparse:
         op_max = self.max(op)
         op = self.exponent(op, m, op_max)
         print('dense', self.density)
-        # check op is dense or not, within THRESHOLD such as 10% sparse, then decide MM or SPMM to use.
+        # check op is dense or not, within THRESHOLD such as 10% sparse, then decide to use MM or SPMM.
         if self.use_sparse and self.density < THRESHOLD:
             sop = csr_matrix(op)
             print('sparse nnz:', sop.nnz)

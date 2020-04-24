@@ -1,0 +1,2 @@
+Intel Xeon CPU E5-2620 v4 @ 2.10GHz * 2
+NVIDIA GeForce GTX 1080 Ti GPU
