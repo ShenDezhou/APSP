@@ -13,7 +13,6 @@ package edu.tsinghua;
 import lombok.extern.slf4j.Slf4j;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;

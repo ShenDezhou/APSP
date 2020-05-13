@@ -24,13 +24,20 @@ else:
 import AllPairsShortestPath
 import time
 
-adj_matrix = cupy.load('weibo_dic/weibo.npz')['matrix']
+adj_matrix = cupy.load('../dataset/weibo-actors-adjacent.npz')['matrix']
 DIAMETER=9
 print(adj_matrix.shape)
 
 t = time.process_time()
 apsp = AllPairsShortestPath.AllPairsShortestPath(adj_matrix)
-mr = apsp.apsp()
+
+
+counter = 1
+for mat in apsp.apsp_iter(g_diameter=8):
+    print(mat)
+    cupy.savez_compressed('target/weibo-%d.npz'%counter, mat=mat)
+    counter+=1
+
 te = time.process_time()
 print('time:', te-t)
 print('FIN')

@@ -15,11 +15,12 @@ from cupy import cusparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--use', type=str, default='gpu', help='cpu or gpu to use?')
 parser.add_argument('-s', '--sparse', type=bool, default=True, help='use scipy.sparse?')
+parser.add_argument('-t', '--threshold', type=float, default=0.1, help='sparseness threshold.')
 args = parser.parse_known_args()[0]
 
 if args.sparse:
     #should be stay inside: (0.008536974741436418, 0.31259434136382935), cannot be too large.
-    THRESHOLD = 0.1
+    THRESHOLD = args.threshold
     if args.use == 'cpu':
         from scipy.sparse import csr_matrix
     else:

@@ -9,8 +9,14 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import argparse
+import time
+import AllPairsShortestPathSparse
+import AllPairsShortestPath
+
 parser = argparse.ArgumentParser()
+parser.add_argument('-m', '--matrixfile', type=str, default='dataset/weibo-actors-adjacent.npz', help='specify the input matrix numpy file.')
 parser.add_argument('-u', '--use', type=str, default='gpu', help='cpu or gpu to use?')
+parser.add_argument('-d', '--diameter', type=int, default=8, help='diameter of network.')
 parser.add_argument('-s', '--sparse', type=bool, default=True, help='use scipy.sparse to accelerate?')
 args = parser.parse_known_args()[0]
 
@@ -26,16 +32,16 @@ if args.use =='cpu':
 else:
     import cupy
 
-import AllPairsShortestPathSparse
-import time
-
-adj_matrix = cupy.load('weibo_dic/weibo.npz')['matrix']
-DIAMETER=9
+adj_matrix = cupy.load(args.matrixfile)['matrix']
 print(adj_matrix.shape)
-
 t = time.process_time()
-apsp = AllPairsShortestPathSparse.AllPairsShortestPathSparse(adj_matrix)
-mr = apsp.apsp()
+
+if args.sparse:
+    apsp = AllPairsShortestPathSparse.AllPairsShortestPathSparse(adj_matrix)
+else:
+    apsp = AllPairsShortestPath.AllPairsShortestPath(adj_matrix)
+
+mr = apsp.apsp(g_diameter=args.diameter)
 te = time.process_time()
 print('time:', te-t)
 print('FIN')

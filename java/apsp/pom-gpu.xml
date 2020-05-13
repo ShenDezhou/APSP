@@ -23,33 +23,33 @@
     </properties>
 
     <dependencies>
-        <!--CUDA support: need to uncomment for use GPU, however GPU is slower than CPU.-->
-<!--        <dependency>-->
-<!--            <groupId>org.nd4j</groupId>-->
-<!--            <artifactId>nd4j-cuda-10.0-platform</artifactId>-->
-<!--            <version>${nd4j.version}</version>-->
-<!--        </dependency>-->
+<!--        CUDA support: need to uncomment for use GPU, however GPU is slower than CPU.-->
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-cuda-10.0-platform</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
 
         <!--CPU support -->
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native-platform</artifactId>
-            <version>${nd4j.version}</version>
-        </dependency>
-        <!--windows vx2 support -->
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
-            <version>${nd4j.version}</version>
-            <classifier>windows-x86_64-avx2</classifier>
-        </dependency>
-        <!--linux vx2 support -->
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native</artifactId>
-            <version>${nd4j.version}</version>
-            <classifier>linux-x86_64-avx2</classifier>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-native-platform</artifactId>-->
+<!--            <version>${nd4j.version}</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;windows vx2 support &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-native</artifactId>-->
+<!--            <version>${nd4j.version}</version>-->
+<!--            <classifier>windows-x86_64-avx2</classifier>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash;linux vx2 support &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.nd4j</groupId>-->
+<!--            <artifactId>nd4j-native</artifactId>-->
+<!--            <version>${nd4j.version}</version>-->
+<!--            <classifier>linux-x86_64-avx2</classifier>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -94,7 +94,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-cpu</finalName>
+        <finalName>${project.artifactId}-gpu</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

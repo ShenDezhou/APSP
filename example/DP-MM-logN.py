@@ -11,6 +11,7 @@
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--use', type=str, default='gpu', help='cpu or gpu to use?')
+parser.add_argument('-d', '--diameter', type=int, default=8, help='diameter of network.')
 args = parser.parse_known_args()[0]
 
 #67.317963493 GPU 14/4
@@ -27,12 +28,12 @@ else:
 import AllPairsShortestPath
 import time
 
-adj_matrix = cupy.load('weibo_dic/weibo.npz')['matrix']
-DIAMETER=adj_matrix.shape[0]
+adj_matrix = cupy.load('../dataset/weibo-actors-adjacent.npz')['matrix']
+args.diameter=adj_matrix.shape[0]
 
 t = time.process_time()
 apsp = AllPairsShortestPath.AllPairsShortestPath(adj_matrix, use_dynamic=True)
-mr = apsp.apsp(g_diameter=DIAMETER)
+mr = apsp.apsp(g_diameter=args.diameter)
 te = time.process_time()
 print('time:', te-t)
 print('FIN')
