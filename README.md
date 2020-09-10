@@ -1,5 +1,9 @@
+#Supplementary
+Dataset, code and experiment are available at:  
+`https://codeload.github.com/ShenDezhou/APSP/zip/master`.
+
 #0. Dataset: Sina Weibo Actors Following Relationship Matrix
-The following files are in `dataset` folder,
+The following files are in `dataset` folder.  
 1. actorId.txt  
 This file contains profiles of movie actors who has an account in Sina Weibo. Following information are provided for each actor: the number of fans(10k), Sina Weibo verified name, Sina Weibo Account Id, Sina Weibo Nickname, actor self description. All actors have at least 10,000 of fans, it shows that all users in this dataset are famous to some point.  
 
@@ -29,22 +33,37 @@ Secondly, python libraries need to be installed, install dependencies using comm
 ##2.3 Java Libraries
 Thirdly, java libraries need to be installed, install dependencies using command: `mvn install:install-file -DpomFile=pom[-gpu].xml`.  
 The installed full list is as follows:  
-`
-org.nd4j:nd4j-cuda-10.0-platform:1.0.0-beta6
-org.nd4j:nd4j-native-platform:1.0.0-beta6
-org.nd4j:nd4j-native:windows-x86_64-avx2:1.0.0-beta6
-org.nd4j:nd4j-native:linux-x86_64-avx2:1.0.0-beta6
-org.slf4j:slf4j-api:1.7.25
-ch.qos.logback:logback-classic:1.2.3
-org.projectlombok:lombok:1.18.10
-org.springframework.boot:spring-boot-starter-web:2.2.5.RELEASE
-org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE
-`
+1) org.nd4j:nd4j-cuda-10.0-platform:1.0.0-beta6
+2) org.nd4j:nd4j-native-platform:1.0.0-beta6
+3) org.nd4j:nd4j-native:windows-x86_64-avx2:1.0.0-beta6
+4) org.nd4j:nd4j-native:linux-x86_64-avx2:1.0.0-beta6
+5) org.slf4j:slf4j-api:1.7.25
+6) ch.qos.logback:logback-classic:1.2.3
+7) org.projectlombok:lombok:1.18.10
+8) org.springframework.boot:spring-boot-starter-web:2.2.5.RELEASE
+9) org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE
+
 
 ##2.4 Java jar build.
 Lastly, use maven to build executing jar. Using command: `mvn package -f pom[-gpu].xml`, then get the result jar file `apsp-cpu.jar` or `apsp-gpu.jar`.
 
-#3. Execution Guidline
+#3. Experimental Guidline
+
+In total, two parts of code are provided.
+1) python code: 
+include Alon N and PowerLawBound algorithm files.     
+1.1) AllPairsShortestPath.py  
+1.2) AllPairsShortestPathSparse.py  
+1.3) DP-MM-app.py  
+2) java code:
+FloydWarshall and PowerLawBound algorithm implementation files, all java code files are put under folder of `src_java/`.  
+2.1) src_java/pom-gpu.xml  
+2.2) src_java/pom.xml  
+2.3) src_java/src/main/java/edu/tsinghua/  
+2.3.1) src_java/src/main/java/edu/tsinghua/App.java  
+2.3.2) src_java/src/main/java/edu/tsinghua/CustomOperations.java  
+2.3.3) src_java/src/main/java/edu/tsinghua/EarlyStopRepeatedSquareMatrixMultiplicationDistanceProduct.java  
+2.3.4) src_java/src/main/java/edu/tsinghua/FloydWarshall.java  
 
 ##3.1 Floyd-Warshal
 Command parameters explained as follows:
@@ -62,14 +81,14 @@ Command parameters explained as follows:
 3) -s for sparseness judgement
 4) -t for sparseness threshold 0.1 for 10% of the total elements is valid.
 5) -m for input matrix file in compressed matrix format.
-`python DP-MM-app.py -u gpu -d 8058 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
+`python src/DP-MM-app.py -u gpu -d 8058 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3 PowerLawBound
 ##3.3.1 PowerLawBound-CPU-NumPy
-`python DP-MM-app.py -u cpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
+`python src/DP-MM-app.py -u cpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.2 PowerLawBound-CPU-SciPy-sparse-Numpy
-`python DP-MM-app.py -u cpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
+`python src/DP-MM-app.py -u cpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.3 PowerLawBound-GPU-CUBLAS
 `java -jar apsp-gpu.jar matrix.npy 8 apsp.npy`
@@ -78,37 +97,48 @@ Command parameters explained as follows:
 `java -jar apsp-cpu.jar matrix.npy 8 apsp.npy`
 
 ##3.3.5 PowerLawBound-GPU-CuPy
-`python DP-MM-app.py -u gpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
+`python src/DP-MM-app.py -u gpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.6 PowerLawBound-GPU-CuPy-cuSparse-Cupy
-`python DP-MM-app.py -u gpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
+`python src/DP-MM-app.py -u gpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
 
 #4. Experimental Results
 
-| Algorithm  |     Total Execution Time(seconds) |
-|------------|-----------------------------------|
-|Floyd-Warshal[1-2]|1055880.0|
-|Alon N[3] |594.7 |
-|PowerLawBound-CPU-NumPy|427.9 |
-|PowerLawBound-CPU-SciPy-sparse-Numpy|328.4 |
-|PowerLawBound-GPU-CUBLAS|95.0 |
-|PowerLawBound-CPU-OPENBLAS|45.0 |
-|PowerLawBound-GPU-CuPy|19.32 |
-|PowerLawBound-GPU-CuPy-cuSparse-Cupy|15.98 |
+| Algorithm                          |Total Execution Time(seconds) |
+|------------------------------------|-----------|
+|Floyd-Warshal[1-2]                  |1055880.0  |
+|Alon N[3]                           |594.7      |
+|PowerLawBound-CPU-NumPy             |427.9      |
+|PowerLawBound-CPU-SciPy-sparse-Numpy|328.4      |
+|PowerLawBound-GPU-CUBLAS             |95.0      |
+|PowerLawBound-CPU-OPENBLAS           |45.0      |
+|PowerLawBound-GPU-CuPy               |19.32     |
+|PowerLawBound-GPU-CuPy-cuSparse-Cupy |15.98     |
 
 #5. Parameters
 
 Parameter used to get state-of-the-art for PowerLawBound algorithm in computation of all pairs shortest path of actors social network.  
 
-| Parameter  |     Value          |       Range    |
-|------------|-----------------|------------------|
-|Sparseness|True| True/False|
-|Sparseness-Threshold|0.1|0-1|
-|Diameter |8|  1-8508      |
-|Hardware |gpu| cpu/gpu |
+| Parameter          |     Value       |       Range      |
+|--------------------|-----------------|------------------|
+|Sparseness          |True             | True/False       |
+|Sparseness-Threshold|0.1              |0-1               |
+|Diameter            |8                |  1-8508          |
+|Hardware            |gpu              | cpu/gpu          |
 
 
 #6. Reference
-[1] Floyd R W. Algorithm 97: Shortest path[J]. Communications of the ACo, 1962, 5(6,:345.  
-[2] Warshall S. A Theorem on Boolean oatrices[J]. Journal of the ACo, 1962, 9(1,:11-12.  
-[3] Alon N, Galil Z, oargalit O. On the exponent of the all pairs shortest path problem[J]. Journal of Computer and System Sciences, 1997, 54(2,:255-262.  
+[1] Floyd R W. Algorithm 97: Shortest path[J]. Communications of the ACo, 1962, 5(6):345.  
+[2] Warshall S. A Theorem on Boolean oatrices[J]. Journal of the ACo, 1962, 9(1):11-12.  
+[3] Alon N, Galil Z, oargalit O. On the exponent of the all pairs shortest path problem[J]. Journal of Computer and System Sciences, 1997, 54(2):255-262.  
+
+
+#7. How to Cite
+```
+@article{shen2020lower,
+  title={Lower Bounds on Rate of Convergence of Matrix Products in All Pairs Shortest Path of Social Network},
+  author={Shen, Dezhou},
+  journal={arXiv preprint arXiv:2006.13412},
+  year={2020}
+}
+```

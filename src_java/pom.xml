@@ -29,7 +29,12 @@
 <!--            <artifactId>nd4j-cuda-10.0-platform</artifactId>-->
 <!--            <version>${nd4j.version}</version>-->
 <!--        </dependency>-->
-
+        <!-- https://mvnrepository.com/artifact/net.java.dev.javacc/javacc -->
+        <dependency>
+            <groupId>net.java.dev.javacc</groupId>
+            <artifactId>javacc</artifactId>
+            <version>3.2</version>
+        </dependency>
         <!--CPU support -->
         <dependency>
             <groupId>org.nd4j</groupId>
