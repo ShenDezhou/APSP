@@ -8,6 +8,9 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+import sys
+sys.path.extend(['.','..'])
+
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--use', type=str, default='gpu', help='cpu or gpu to use?')
@@ -27,13 +30,13 @@ if args.use =='cpu':
 else:
     import cupy
 
-import AllPairsShortestPathSparse
+from src.AllPairsShortestPathSparse import AllPairsShortestPathSparse
 import time
 
 adj_matrix = cupy.load('../dataset/weibo-actors-adjacent.npz')['matrix']
 print(adj_matrix.shape)
 t = time.process_time()
-apsp = AllPairsShortestPathSparse.AllPairsShortestPathSparse(adj_matrix)
+apsp = AllPairsShortestPathSparse(adj_matrix)
 mr = apsp.apsp(g_diameter=args.diameter)
 te = time.process_time()
 print('time:', te-t)

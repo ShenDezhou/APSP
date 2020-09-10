@@ -21,16 +21,12 @@ else:
 import math
 
 class AllPairsShortestPath:
-    adj_matrix = None
-    e_max = None
-    g_diameter = None
-    use_dynamic = False
-
-    def __init__(self, adj, g_diameter=9, use_dynamic=False):
+    def __init__(self, adj, g_diameter=9, use_dynamic=True, converge_epsilon=1E-4):
         self.adj_matrix = adj
         self.e_max = cupy.max(self.adj_matrix)
         self.g_diameter = g_diameter
         self.use_dynamic = use_dynamic
+        self.epsilon = converge_epsilon
         print('shape:', adj.shape, 'element_max', self.e_max, 'diameter:', self.g_diameter, 'use_dynamic:', self.use_dynamic)
 
     def stat(self, op):
@@ -89,9 +85,13 @@ class AllPairsShortestPath:
             print('apsp,b:', wr)
             post = cupy.minimum(adj, wr)
             print('apsp,c:', adj)
-            if self.use_dynamic and cupy.all(cupy.equal(adj, post)):
-                print('LOOP EXIT by dynamic decision.')
-                break
+            if self.use_dynamic:
+                print('checking diff:')
+                equalsum = cupy.sum(cupy.equal(adj, post))
+                print('equals:', equalsum, "/", cupy.size(adj)," ({}%)".format(equalsum*100.0/ cupy.size(adj)))
+                if equalsum > (1.0 - self.epsilon) * cupy.size(adj):
+                    print('LOOP EXIT by dynamic decision. at LOOP:', i)
+                    break
             adj = post
         print('apsp:', adj)
         return adj

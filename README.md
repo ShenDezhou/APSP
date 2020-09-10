@@ -85,10 +85,10 @@ Command parameters explained as follows:
 
 ##3.3 PowerLawBound
 ##3.3.1 PowerLawBound-CPU-NumPy
-`python src/DP-MM-app.py -u cpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
+`python example/DP-MM-app.py -u cpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.2 PowerLawBound-CPU-SciPy-sparse-Numpy
-`python src/DP-MM-app.py -u cpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
+`python example/DP-MM-app.py -u cpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.3 PowerLawBound-GPU-CUBLAS
 `java -jar apsp-gpu.jar matrix.npy 8 apsp.npy`
@@ -97,10 +97,10 @@ Command parameters explained as follows:
 `java -jar apsp-cpu.jar matrix.npy 8 apsp.npy`
 
 ##3.3.5 PowerLawBound-GPU-CuPy
-`python src/DP-MM-app.py -u gpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
+`python example/DP-MM-app.py -u gpu -d 8 -s False -m dataset\weibo-actors-adjacent.npz`
 
 ##3.3.6 PowerLawBound-GPU-CuPy-cuSparse-Cupy
-`python src/DP-MM-app.py -u gpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
+`python example/DP-MM-app.py -u gpu -d 8 -s True -t 0.1 -m dataset\weibo-actors-adjacent.npz`
 
 #4. Experimental Results
 
